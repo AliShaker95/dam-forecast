@@ -27,7 +27,7 @@ dams_capacity = {
 
 # print(rain.columns)
 # print(rain["Unnamed: 11"].isna().sum())   # the total no of the empty cells in the column "Unnamed: 11".
-rain = rain.drop(columns=["Unnamed: 11"])   # remove the empty column
+rain = rain.drop(columns=["Unnamed: 11"])  # remove the empty column
 
 dams = dams.rename(
     columns={
@@ -70,11 +70,15 @@ rain = rain.rename(
 # print(text_dates.head(20))
 # print(text_dates.tail(20))
 
-is_text = dams["date"].map(type) == str     # true: the data in the column "date" is str, false: is not
+is_text = (
+    dams["date"].map(type) == str
+)  # true: the data in the column "date" is str, false: is not
 # if the data type in column "date" is str, it changes it to the wanted format
 dams.loc[is_text, "date"] = pd.to_datetime(dams.loc[is_text, "date"], format="%d.%m.%Y")
 
-dams["date"] = pd.to_datetime(dams["date"])     # changes the entire column preset to the wanted format
+dams["date"] = pd.to_datetime(
+    dams["date"]
+)  # changes the entire column preset to the wanted format
 
 # print(dams.dtypes)
 
@@ -94,7 +98,7 @@ dams["date"] = pd.to_datetime(dams["date"])     # changes the entire column pres
 # print(len(percent_rows))
 # print(percent_rows["date"].min(), percent_rows["date"].max())
 
-occ_cols = dams.columns.drop("date")    # a list of columns' names without "date"
+occ_cols = dams.columns.drop("date")  # a list of columns' names without "date"
 not_percent = dams["occ_omerli"] <= 1
 dams.loc[not_percent, occ_cols] = dams.loc[not_percent, occ_cols] * 100
 # print(dams.describe().T)
@@ -112,4 +116,12 @@ water = dams[capacity.index] * capacity / 100
 dams["occ_total"] = water.sum(axis=1) / capacity.sum() * 100
 # print(dams.loc[dams["date"] == "2024-02-16", ["date", "occ_total"]])
 # print(dams.loc[dams["date"] == "2023-12-01", ["date", "occ_total"]])
-print(dams)
+
+data = pd.merge(dams, rain, on="date", how="inner")
+# print(data.shape)
+# print(data["date"].min(), data["date"].max())
+
+# data.to_csv("data/processed/dams_clean.csv", index=False)
+
+# check = pd.read_csv("data/processed/dams_clean.csv")
+# print(check.shape)
