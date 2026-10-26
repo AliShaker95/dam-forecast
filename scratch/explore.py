@@ -3,6 +3,18 @@ import pandas as pd
 dams = pd.read_excel("data/raw/istanbul-dams-daily-occupancy-rates.xlsx")
 rain = pd.read_excel("data/raw/istanbul-barajlarnda-ya-ve-gunluk-tuketim-verileri.xlsx")
 
+dams_capacity = {
+    "omerli": 244540000,
+    "darlik": 102463000,
+    "elmali": 9600000,
+    "terkos": 195974000,
+    "alibey": 34143000,
+    "buyukcekmece": 129892000,
+    "sazlidere": 88730000,
+    "kazandere": 21096000,
+    "pabucdere": 35222000,
+    "istrancalar": 6231000,
+}
 
 # print(dams.head())    # shows the head (first 5 rows) of dams.
 # print(dams.shape)     # shows the shape (no of rows and columns) in dams.
@@ -93,3 +105,11 @@ dams.loc[not_percent, occ_cols] = dams.loc[not_percent, occ_cols] * 100
 
 # print(dams[dams["occ_pabucdere"] == 0]["date"])
 # print(dams.loc[4814 : 4820, ["date", "occ_pabucdere"]])
+
+capacity = pd.Series(dams_capacity)
+capacity.index = "occ_" + capacity.index
+water = dams[capacity.index] * capacity / 100
+dams["occ_total"] = water.sum(axis=1) / capacity.sum() * 100
+# print(dams.loc[dams["date"] == "2024-02-16", ["date", "occ_total"]])
+# print(dams.loc[dams["date"] == "2023-12-01", ["date", "occ_total"]])
+print(dams)
