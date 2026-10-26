@@ -66,8 +66,30 @@ dams["date"] = pd.to_datetime(dams["date"])     # changes the entire column pres
 
 # print(dams.dtypes)
 
-gaps = dams["date"].diff()      # the difference from the row before in the column "date"
-print(gaps.value_counts())
+# gaps = dams["date"].diff()      # the difference from the row before in the column "date"
+# print(gaps.value_counts())
 
-print(rain.dtypes)
-print(rain["date"].diff().value_counts())
+# print(rain.dtypes)              # the same thing for rain
+# print(rain["date"].diff().value_counts())
+
+# print(dams.isna().sum())      # the number of empty cells (it dosn't show fake 0 (empty values might be recorded as 0))
+# print(rain.isna().sum())
+
+# print(dams.describe().T)
+# print(rain.describe().T)
+
+# percent_rows = dams[dams["occ_omerli"] > 1]  # saves the rows that are presented in persentage as big
+# print(len(percent_rows))
+# print(percent_rows["date"].min(), percent_rows["date"].max())
+
+occ_cols = dams.columns.drop("date")    # a list of columns' names without "date"
+not_percent = dams["occ_omerli"] <= 1
+dams.loc[not_percent, occ_cols] = dams.loc[not_percent, occ_cols] * 100
+# print(dams.describe().T)
+
+# print((dams[occ_cols] == 0).sum())
+# alibey_zeros = dams[dams["occ_alibey"] == 0]
+# print(alibey_zeros["date"].min(), alibey_zeros["date"].max())
+
+# print(dams[dams["occ_pabucdere"] == 0]["date"])
+# print(dams.loc[4814 : 4820, ["date", "occ_pabucdere"]])
