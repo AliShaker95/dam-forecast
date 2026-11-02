@@ -130,7 +130,7 @@ Average miss per month in points (+ = too full, − = too empty):
 ```
 python -m venv .venv
 .venv\Scripts\Activate.ps1
-python -m pip install pandas openpyxl matplotlib scikit-learn
+python -m pip install -r requirements.txt
 
 python src/clean.py        # raw Excel files -> data/processed/dams_clean.csv
 python scratch/eda.py      # exploration charts -> figures/
@@ -148,4 +148,5 @@ data/processed/    dams_clean.csv (built by src/clean.py)
 src/               cleaning, baseline, models, evaluation
 scratch/           exploration scripts (explore.py, eda.py)
 figures/           charts used in this README
+requirements.txt   exact package versions
 ```
