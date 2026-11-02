@@ -15,7 +15,9 @@ data["target"] = data["occ_total"].shift(-30)
 data = data.dropna(subset=["rain_30d", "change_30d", "target"])
 
 months = pd.get_dummies(data["month"], prefix="m", dtype=int)
-X = pd.concat([data[["occ_total", "change_30d", "rain_30d", "use_30d"]], months], axis=1)
+X = pd.concat(
+    [data[["occ_total", "change_30d", "rain_30d", "use_30d"]], months], axis=1
+)
 y = data["target"]
 
 # split by date
@@ -30,5 +32,9 @@ pred = model.predict(X[test])
 error = pred - y[test]
 print("test days:", test.sum())
 print("average miss:", round(error.abs().mean(), 2), "points   (baseline: 8.05)")
-print("too full:", (error > 0).sum(), "days, average", round(error[error > 0].mean(), 2))
-print("too empty:", (error < 0).sum(), "days, average", round(error[error < 0].mean(), 2))
+print(
+    "too full:", (error > 0).sum(), "days, average", round(error[error > 0].mean(), 2)
+)
+print(
+    "too empty:", (error < 0).sum(), "days, average", round(error[error < 0].mean(), 2)
+)
